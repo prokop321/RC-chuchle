@@ -1,81 +1,19 @@
 <template>
   <Page
     :title="[
-      { text: 'Kurzy', link: '/rozvrh' },
+      { text: 'Kurzy', link: '/kurzy' },
       {
         text: course.title || '',
       },
     ]"
   >
     <div class="flex flex-col gap-4 pt-6 lg:flex-row">
-      <div
+      <Gallery
         v-if="course.images && course.images.length > 0"
-        @scroll="onScroll"
-        ref="imageScroller"
-        class="flex max-w-xl snap-x flex-row self-center overflow-x-scroll whitespace-nowrap bg-fill lg:max-w-xl"
-      >
-        <div
-          v-if="course.images.length > 1"
-          class="absolute flex bg-background"
-        >
-          <p class="px-4 py-2">
-            {{ currentImageIndex + 1 }}/{{ course.images.length }}
-          </p>
-          <button
-            :class="{
-              'opacity-50': currentImageIndex <= 0,
-              'pointer-events-none': currentImageIndex <= 0,
-            }"
-            class="flex items-center px-4 hover:bg-primary hover:text-background"
-            @click="
-              () => {
-                if (currentImageIndex <= 0) return;
-
-                if (imageScroller)
-                  imageScroller.scrollTo({
-                    left: (currentImageIndex - 1) * imageScroller.offsetWidth,
-                    behavior: 'smooth',
-                  });
-              }
-            "
-          >
-            <
-          </button>
-          <button
-            class="flex items-center px-4 hover:bg-primary hover:text-background"
-            :class="{
-              'opacity-50': currentImageIndex >= course.images.length - 1,
-              'pointer-events-none':
-                currentImageIndex >= course.images.length - 1,
-            }"
-            @click="
-              () => {
-                if (!course) return;
-                if (currentImageIndex >= (course.images || []).length - 1)
-                  return;
-                if (imageScroller)
-                  if (imageScroller)
-                    imageScroller.scrollTo({
-                      left: (currentImageIndex + 1) * imageScroller.offsetWidth,
-                      behavior: 'smooth',
-                    });
-              }
-            "
-          >
-            >
-          </button>
-        </div>
-        <div
-          v-for="img in course.images"
-          class="sticky-always flex w-full flex-none snap-center items-center justify-center"
-        >
-          <img
-            class="snap-always object-contain"
-            v-if="course.images"
-            :src="imageURLCreator(img)"
-          />
-        </div>
-      </div>
+        :images="course.images"
+        :alt-text="`Obrázek kurzu ${course.title}`"
+        variant="event"
+      />
       <div class="flex flex-col gap-8">
         <div class="flex flex-col gap-1">
           <h3 class="flex gap-4 text-3xl" v-if="course.schedule">
@@ -85,7 +23,13 @@
             {{ dayTimeToString(course.schedule.start) }} -
             {{ dayTimeToString(course.schedule.end) }}
           </h3>
-          <h3 class="text-2xl" v-if="course.lector">{{ course.lector }}</h3>
+          <NuxtLink
+            v-if="lektorId && lektorName"
+            :to="`/lektor/${lektorId}`"
+            class="text-2xl text-primary underline"
+          >
+            {{ lektorName }}
+          </NuxtLink>
         </div>
 
         <VueMarkdown
@@ -103,25 +47,12 @@ import { useMainStore } from "~/store/main";
 
 const courseID = useRoute().params.id as string;
 
-const currentImageIndex = ref(0);
-const imageScroller = ref<HTMLElement | null>(null);
-
-const onScroll = (event: Event) => {
-  const scrollLeft = (event.target as HTMLElement).scrollLeft;
-  const width = (event.target as HTMLElement).offsetWidth;
-
-  const newIndex = Math.round(scrollLeft / width);
-
-  if (newIndex !== currentImageIndex.value) {
-    currentImageIndex.value = newIndex;
-  }
-};
-
 const mainStore = useMainStore();
-const { schedule } = storeToRefs(mainStore);
+const { schedule, lektori } = storeToRefs(mainStore);
 
 const course = computed<ICourse>(() => {
-  const course = schedule.value[courseID];
+  const course =
+    schedule.value !== "error" ? schedule.value[courseID] : undefined;
 
   if (!course)
     return {
@@ -129,6 +60,27 @@ const course = computed<ICourse>(() => {
     };
 
   return course;
+});
+
+const lektorId = computed(() => {
+  if (!course.value.lector) return null;
+
+  if (typeof course.value.lector === "string") {
+    return course.value.lector;
+  } else if (
+    Array.isArray(course.value.lector) &&
+    course.value.lector.length > 0
+  ) {
+    return course.value.lector[0].id;
+  }
+
+  return null;
+});
+
+const lektorName = computed(() => {
+  if (!lektorId.value || lektori.value === "error") return null;
+  const lektor = lektori.value[lektorId.value];
+  return lektor?.name || null;
 });
 
 const week = [

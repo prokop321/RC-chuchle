@@ -13,8 +13,8 @@
               class="color-shadow relative flex gap-4 pl-2 text-left text-text"
             >
               <NuxtLink
-                :class="{ 'text-textTransparent': index !== title.length - 1 }"
-                class="text-center hover:text-primary"
+                :class="{ 'text-text-transparent': index !== title.length - 1 }"
+                class="text-center transition hover:text-primary"
                 v-for="(tit, index) in title"
                 :to="tit.link || title[title.length - 1].text"
               >

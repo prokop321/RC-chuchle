@@ -7,7 +7,7 @@ const config: Config = {
     extend: {
       colors: {
         fill: "var(--fill-color)",
-        textTransparent: "var(--text-transparent-color)",
+        "text-transparent": "var(--text-transparent-color)",
         primaryDark: "var(--primary-dark-color)",
         secondary: "var(--secondary-color)",
         primary: "var(--primary-color)",

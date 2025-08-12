@@ -1,11 +1,10 @@
 <template>
   <div class="absolute top-0" id="uvod"></div>
-
   <section class="relative overflow-hidden px-4 pb-16 pt-48">
-    <!-- Colorful geometric background pattern -->
+    <!-- Colorful geometric background pattern overlay -->
     <img
+      class="absolute inset-0 size-full scale-105 object-cover opacity-70 blur-md"
       src="/patern.jpg"
-      class="absolute inset-0 h-full w-full scale-105 object-cover opacity-80 blur-md"
     />
 
     <div
@@ -27,14 +26,23 @@
               y="-20%"
               width="140%"
               height="140%"
-            >              <feTurbulence baseFrequency="8 6" numOctaves="20" result="noise" />
+            >
+              <feTurbulence
+                baseFrequency="8 6"
+                numOctaves="20"
+                result="noise"
+              />
               <feDisplacementMap
                 in="SourceGraphic"
                 in2="noise"
                 scale="0.5"
                 result="displaced"
               />
-              <feTurbulence baseFrequency="12 8" numOctaves="1" result="overlay" />
+              <feTurbulence
+                baseFrequency="12 8"
+                numOctaves="1"
+                result="overlay"
+              />
               <feComponentTransfer in="overlay" result="overlayMask">
                 <feFuncA
                   type="discrete"
@@ -54,7 +62,7 @@
         <h1
           class="relative z-10 text-center text-5xl font-bold text-text md:text-6xl"
         >
-          Chuchleská komunita pro celou rodinu
+          Chuchelská komunita pro celou rodinu
         </h1>
         <svg
           class="relative z-10 h-6 w-full"
@@ -104,18 +112,17 @@
       </div>
 
       <!-- Three blocks -->
-      <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+      <div class="flex flex-wrap justify-center gap-4">
         <!-- Kurzy block -->
         <div
-          class="relative overflow-hidden rounded-2xl bg-background shadow-lg"
+          class="relative w-full max-w-sm overflow-hidden rounded-2xl bg-background shadow-lg"
         >
           <div
             class="relative h-64 bg-gradient-to-br from-purple-300 to-pink-300"
           >
             <img
-              src="/banner.webp"
               alt="Kurzy"
-              class="absolute inset-0 h-full w-full object-cover"
+              class="absolute inset-0 h-full w-full object-cover opacity-0"
             />
             <div
               class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"
@@ -124,10 +131,10 @@
           <div class="p-6">
             <h2 class="mb-2">Kurzy</h2>
             <p class="mb-5">
-              Objevte naše různorodé sportovní kurzy pro všechny věkové
-              kategorie a úrovně.
+              Objevte naše různorodé kurzy pro všechny věkové kategorie a
+              úrovně.
             </p>
-            <Button color="primary" href="/rozvrh" class="w-full"
+            <Button color="primary" href="/kurzy" class="w-full"
               >Zjistit více</Button
             >
           </div>
@@ -135,13 +142,12 @@
 
         <!-- Akce block -->
         <div
-          class="relative overflow-hidden rounded-2xl bg-background shadow-lg"
+          class="relative w-full max-w-sm overflow-hidden rounded-2xl bg-background shadow-lg"
         >
           <div class="relative h-64 bg-gradient-to-br">
             <img
-              src="/banner.webp"
               alt="Akce"
-              class="absolute inset-0 h-full w-full object-cover"
+              class="absolute inset-0 h-full w-full object-cover opacity-0"
             />
             <div
               class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"
@@ -150,8 +156,8 @@
           <div class="p-6">
             <h2 class="mb-2">Akce</h2>
             <p class="mb-5">
-              Přidejte se k našim společenským akcím, turnajům a sportovním
-              událostem.
+              Zůčastni se našich společenských akcí a různých komunitních
+              setkání
             </p>
             <Button color="primary" :href="'/akce'" class="w-full"
               >Zjistit více</Button
@@ -159,53 +165,32 @@
           </div>
         </div>
 
-        <!-- Nejen pro seniory block -->
+        <!-- Akce pro seniory block -->
         <div
-          class="relative overflow-hidden rounded-2xl bg-background shadow-lg"
+          class="relative w-full max-w-sm overflow-hidden rounded-2xl bg-background shadow-lg"
         >
           <div
-            class="relative h-64 bg-gradient-to-br from-gray-600 to-gray-800"
+            class="relative h-64 bg-gradient-to-br from-orange-300 to-amber-300"
           >
             <img
-              src="/banner.webp"
-              alt="Nejen pro seniory"
-              class="absolute inset-0 h-full w-full object-cover"
+              alt="Akce pro seniory"
+              class="absolute inset-0 h-full w-full object-cover opacity-0"
             />
             <div
               class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"
             ></div>
           </div>
           <div class="p-6">
-            <h2 class="mb-2">Nejen pro seniory</h2>
+            <h2 class="mb-2">Pro seniory</h2>
             <p class="mb-5">
-              Specializované programy a aktivity přizpůsobené potřebám starších
-              sportovců.
+              Speciální akce a programy určené pro naše starší členy komunity
             </p>
-            <Button color="primary" class="w-full">Zjistit více</Button>
+            <Button color="primary" href="/akce?type=senior" class="w-full"
+              >Zjistit více</Button
+            >
           </div>
         </div>
       </div>
     </div>
   </section>
 </template>
-
-<style lang="scss" scoped>
-.bg-shade {
-  position: relative;
-  * {
-    z-index: 2;
-  }
-  &::before {
-    content: "";
-    position: absolute;
-    z-index: 1;
-    background-color: black;
-    opacity: 0.6;
-    filter: blur(96px);
-    top: -96px;
-    left: -96px;
-    right: -96px;
-    bottom: -96px;
-  }
-}
-</style>

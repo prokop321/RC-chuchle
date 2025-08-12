@@ -1,7 +1,7 @@
 <template>
-  <Page :title="[{ text: 'Rozvrh', link: '/rozvrh' }]" :padding="false">
+  <Page :title="[{ text: 'Lektoři', link: '/lektori' }]" :padding="false">
     <template #noPadding>
-      <CourseSchedule />
+      <LectorGrid />
     </template>
   </Page>
 </template>

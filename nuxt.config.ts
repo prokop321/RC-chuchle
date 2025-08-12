@@ -13,12 +13,12 @@ export default defineNuxtConfig({
         {
           name: "description",
           content:
-            "TJ Sokol - Velká Chuchle. Zde najdete všechny informace o naší jednotě, oddílech a akcích. Přidej se k nám a najdi cestu k pohybu, který tě bude bavit.",
+            "Rodinné centrum Chuchle - Připravujeme komunitní akce a programy pro Chuchelské rodiny.",
         },
         {
           name: "keywords",
           content:
-            "TJ Sokol, Velká Chuchle, TJ Sokol velká chuchle, Chuchle, sport, pohyb, oddíly, kroužky, Masopust chuchle, tenis chuchle, oddíl, oddíl všestrannosti, věrná garda, sokolovna",
+            "Rodinné centrum Chuchle, Velká Chuchle, Rodinné centrum Praha 5, Chuchle, Komunitní centrum, akce, program pro důchodce, kurzy, Yoga, pro rodniny",
         },
       ],
       link: [
@@ -26,13 +26,13 @@ export default defineNuxtConfig({
           rel: "icon",
           type: "image/x-icon",
           sizes: "32x32",
-          href: "/favicon-32.ico",
+          href: "/favicon_32.ico",
         },
         {
           rel: "icon",
           type: "image/x-icon",
           sizes: "64x64",
-          href: "/favicon-64.ico",
+          href: "/favicon_64.ico",
         },
         {
           rel: "preconnect",
@@ -48,11 +48,11 @@ export default defineNuxtConfig({
           href: "https://fonts.googleapis.com/css2?family=LXGW+Marker+Gothic&display=swap",
         },
       ],
-      title: "T. J. Sokol Velká Chuchle",
+      title: "Rodinné centrum Chuchle",
     },
   },
 
-  modules: ["@pinia/nuxt", "@nuxtjs/tailwindcss"],
+  modules: ["@pinia/nuxt", "@nuxtjs/tailwindcss", "@nuxt/icon"],
 
   imports: {
     dirs: ["store/**"],

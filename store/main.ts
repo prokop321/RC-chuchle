@@ -1,9 +1,7 @@
 import { getContent } from "~/utils/CMS";
-import { addDoc, deleteDoc } from "~/utils/fb/store";
 
 export const useMainStore = defineStore("main", () => {
   const loaded = ref(false);
-  const error = ref(false);
 
   const mailing = ref<null | string>(null);
   const events = ref<
@@ -18,6 +16,18 @@ export const useMainStore = defineStore("main", () => {
       }
     | "error"
   >({});
+  const lektori = ref<
+    | {
+        [key: string]: LektoriItem;
+      }
+    | "error"
+  >({});
+  const posts = ref<
+    | {
+        [key: string]: IPost;
+      }
+    | "error"
+  >({});
 
   onMounted(async () => {
     const mail = localStorage.getItem("mailing");
@@ -26,9 +36,13 @@ export const useMainStore = defineStore("main", () => {
     }
 
     const promiseEventsRes = getContent("akce");
-    const promiseSchedulesRes = getContent("rozvrh");
+    const promiseSchedulesRes = getContent("kurzy");
+    const promiseLektoriRes = getContent("lektori");
+    const promisePostsRes = getContent("aktuality");
     const eventsRes = await promiseEventsRes;
     const schedulesRes = await promiseSchedulesRes;
+    const lektoriRes = await promiseLektoriRes;
+    const postsRes = await promisePostsRes;
 
     if (eventsRes === "error") events.value = "error";
     else {
@@ -53,6 +67,7 @@ export const useMainStore = defineStore("main", () => {
     if (schedulesRes === "error") {
       schedule.value = "error";
     } else {
+      console.log(schedulesRes);
       const convertedSchedules: { [key: string]: ICourse } = Object.keys(
         schedulesRes,
       ).reduce(
@@ -61,6 +76,10 @@ export const useMainStore = defineStore("main", () => {
           const finalSchedule: ICourse = {
             ...schedule,
             id: key,
+            lector:
+              Array.isArray(schedule.lector) && schedule.lector.length > 0
+                ? schedule.lector[0].id
+                : undefined,
             schedule: {
               day: schedule.schedule.day,
               start: schedule.schedule.start,
@@ -74,24 +93,56 @@ export const useMainStore = defineStore("main", () => {
       );
 
       schedule.value = convertedSchedules;
+    }
 
-      loaded.value = true;
+    if (lektoriRes === "error") {
+      lektori.value = "error";
+    } else {
+      const convertedLektori: { [key: string]: LektoriItem } = Object.keys(
+        lektoriRes,
+      ).reduce(
+        (acc, key) => {
+          const lektor = lektoriRes[key];
+          const finalLektor: LektoriItem = {
+            id: key,
+            ...lektor,
+          };
+          acc[key] = finalLektor;
+          return acc;
+        },
+        {} as { [key: string]: LektoriItem },
+      );
+
+      lektori.value = convertedLektori;
+    }
+
+    if (postsRes === "error") {
+      posts.value = "error";
+    } else {
+      const convertedPosts: { [key: string]: IPost } = Object.keys(
+        postsRes,
+      ).reduce(
+        (acc, key) => {
+          const post = postsRes[key];
+          const finalPost: IPost = {
+            id: key,
+            ...post,
+          };
+          acc[key] = finalPost;
+          return acc;
+        },
+        {} as { [key: string]: IPost },
+      );
+
+      posts.value = convertedPosts;
     }
 
     loaded.value = true;
   });
 
-  const subscribe = async (mail: string) => {
-    if (mailing.value) return;
-    await addDoc(["mailing"], {}, mail);
-    mailing.value = mail;
-  };
+  const subscribe = async (mail: string) => {};
 
-  const unsubscribe = async () => {
-    if (!mailing.value) return;
-    await deleteDoc(["mailing"], mailing.value);
-    mailing.value = null;
-  };
+  const unsubscribe = async () => {};
 
   watch(mailing, (value) => {
     if (value) {
@@ -108,5 +159,7 @@ export const useMainStore = defineStore("main", () => {
     unsubscribe,
     events,
     schedule,
+    lektori,
+    posts,
   };
 });

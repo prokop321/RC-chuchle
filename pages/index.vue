@@ -1,12 +1,14 @@
 <template>
-  <HomeHero />
-  <HomeEvents />
+  <div class="overflow-hidden">
+    <HomeHero />
+    <HomeEvents />
 
-  <HomeAbout />
+    <HomeAbout />
 
-  <section class="flex justify-center px-4 py-16">
-    <Newsletter class="w-full max-w-7xl" />
-  </section>
+    <section class="flex justify-center px-4 py-16">
+      <Newsletter class="w-full max-w-7xl" />
+    </section>
+  </div>
 </template>
 <script setup lang="ts">
 definePageMeta({

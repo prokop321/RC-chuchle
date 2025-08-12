@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const CMSURL = "https://prokop321.github.io/sokol-content";
+const CMSURL = "https://prokop321.github.io/RC-Chuchle-content-";
 
 export const getContent = async (
-  content: "akce" | "rozvrh",
+  content: "akce" | "kurzy" | "lektori" | "aktuality",
 ): Promise<"error" | { [key: string]: any }> => {
   const url = `${CMSURL}/content/${content}.json`;
 

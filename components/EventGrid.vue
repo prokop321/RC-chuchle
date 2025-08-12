@@ -43,13 +43,10 @@
 <script lang="ts" setup>
 import { useMainStore } from "~/store/main";
 
-const mainStore = useMainStore();
-
-const { events, loaded } = storeToRefs(mainStore);
-
 const props = defineProps<{
   filtering?: {
     upcoming?: boolean;
+    type?: string;
     limit?: number;
     time?: {
       month?: number; // 0-11
@@ -64,17 +61,27 @@ const emit = <
   }
 >defineEmits();
 
+const mainStore = useMainStore();
+const { events, loaded } = storeToRefs(mainStore);
+
 const eventsToShow = computed<IEvent[]>(() => {
   if (!events.value || events.value === "error") return [];
+
+  const filtering = props.filtering;
 
   let eventsArray = Object.values(events.value);
 
   const filterArray = eventsArray.filter((event) => {
-    const filtering = props.filtering;
-
     if (!filtering) return true;
 
-    if (filtering.time) {
+    if (filtering.upcoming) {
+      if (!event.date) return false;
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (!(new Date(event.date) >= today)) return false;
+    } else if (filtering.time) {
       const year = filtering.time?.year;
       const month = filtering.time?.month;
 
@@ -95,14 +102,7 @@ const eventsToShow = computed<IEvent[]>(() => {
       }
     }
 
-    if (filtering.upcoming) {
-      if (!event.date) return false;
-
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      return new Date(event.date) >= today;
-    }
+    if (filtering.type && event.type !== filtering.type) return false;
 
     return true;
   });
@@ -118,26 +118,24 @@ const eventsToShow = computed<IEvent[]>(() => {
     props.filtering?.limit || sortedArray.length,
   );
 
-  return sortedArray;
+  return slicedArray;
 });
 
-watch(
-  events,
-  () => {
-    let eventsArray = Object.values(events.value);
+const getValidYears = () => {
+  let eventsArray = Object.values(events.value);
 
-    const validYears = eventsArray
-      .map((event) => {
-        if (!event.date) return null;
-        return new Date(event.date).getFullYear();
-      })
-      .filter((year) => year !== null)
-      .sort((a, b) => {
-        return a - b;
-      }) as number[];
+  const validYears = eventsArray
+    .map((event) => {
+      if (!event.date) return null;
+      return new Date(event.date).getFullYear();
+    })
+    .filter((year) => year !== null)
+    .sort((a, b) => {
+      return a - b;
+    }) as number[];
 
-    emit("validYears", Array.from(new Set(validYears)));
-  },
-  { immediate: true },
-);
+  emit("validYears", Array.from(new Set(validYears)));
+};
+
+watch(events, getValidYears, { immediate: true });
 </script>
