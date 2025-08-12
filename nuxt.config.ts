@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   ssr: false,
 
   app: {
+    baseURL: "/RC-chuchle",
     head: {
       htmlAttrs: {
         lang: "cs",
