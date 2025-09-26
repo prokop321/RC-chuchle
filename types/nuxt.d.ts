@@ -20,6 +20,7 @@ declare global {
       start: number;
       duration: number;
     };
+    mode: "pravidelny" | "daleNabizime";
   }
 
   interface IPost {

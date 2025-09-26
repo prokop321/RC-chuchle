@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="left-0 right-0 top-0 z-50 flex flex-col items-center xl:px-4"
+    class="left-0 right-0 top-0 z-40 flex flex-col items-center xl:px-4"
     :class="{
       sticky: !fixedNav,
       fixed: fixedNav,

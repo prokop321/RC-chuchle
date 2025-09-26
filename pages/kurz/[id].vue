@@ -16,7 +16,10 @@
       />
       <div class="flex flex-col gap-8">
         <div class="flex flex-col gap-1">
-          <h3 class="flex gap-4 text-3xl" v-if="course.schedule">
+          <h3
+            class="flex gap-4 text-3xl"
+            v-if="course.schedule && course.mode !== 'daleNabizime'"
+          >
             <span class="text-primary">
               {{ week[course.schedule.day] }}
             </span>

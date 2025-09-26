@@ -1,17 +1,11 @@
 <template>
   <div
     v-if="normalizedImages && normalizedImages.length > 0"
-    @scroll="onScroll"
-    ref="imageScroller"
-    class="flex max-w-xl snap-x flex-row self-center rounded-xl bg-fill lg:max-w-xl"
-    :class="{
-      'overflow-x-scroll': normalizedImages.length > 1,
-      'overflow-x-hidden': normalizedImages.length <= 1,
-    }"
+    class="lg:w-2xl relative aspect-square w-full max-w-xl overflow-hidden rounded-xl bg-fill"
   >
     <div
       v-if="normalizedImages.length > 1"
-      class="absolute z-10 flex rounded-xl bg-background shadow-lg"
+      class="absolute left-3 top-3 z-10 flex overflow-hidden rounded-xl bg-background shadow-lg"
     >
       <p class="px-4 py-3 text-lg font-medium">
         {{ currentImageIndex + 1 }}/{{ normalizedImages.length }}
@@ -24,7 +18,7 @@
         class="flex items-center px-4 py-3 text-lg transition hover:bg-primary hover:text-background"
         @click="scrollToPrevious"
       >
-        <
+        <Icon name="fe:arrow-left" class="h-6 w-6" />
       </button>
       <button
         class="flex items-center px-4 py-3 text-lg transition hover:bg-primary hover:text-background"
@@ -35,35 +29,32 @@
         }"
         @click="scrollToNext"
       >
-        >
+        <Icon name="fe:arrow-right" class="h-6 w-6" />
       </button>
     </div>
 
-    <!-- For events with different structure -->
     <div
-      v-if="variant === 'event'"
-      v-for="(img, index) in normalizedImages"
-      :key="`event-${index}`"
-      class="sticky-always flex w-full flex-none cursor-pointer snap-center items-center justify-center"
-      @click="openFullscreen(index)"
+      ref="imageScroller"
+      @scroll="onScroll"
+      class="no-scrollbar relative flex size-full snap-x snap-always flex-row overflow-y-hidden"
+      :class="{
+        'overflow-x-scroll': normalizedImages.length > 1,
+        'overflow-x-hidden': normalizedImages.length <= 1,
+      }"
     >
-      <img
-        class="snap-always rounded-xl object-contain"
-        :src="imageURLCreator(img)"
-        :alt="altText || `Image ${index + 1}`"
-      />
+      <div
+        v-for="(img, index) in normalizedImages"
+        :key="`image-${index}`"
+        class="sticky-always flex w-full flex-none cursor-pointer snap-center items-center justify-center"
+        @click="openFullscreen(index)"
+      >
+        <img
+          class="size max-h-full rounded-xl object-contain"
+          :src="imageURLCreator(img)"
+          :alt="altText || `Image ${index + 1}`"
+        />
+      </div>
     </div>
-
-    <!-- For courses and lectors with standard structure -->
-    <img
-      v-else
-      v-for="(img, index) in normalizedImages"
-      :key="`default-${index}`"
-      :src="imageURLCreator(img)"
-      :alt="altText || `Image ${index + 1}`"
-      class="h-96 w-full flex-shrink-0 cursor-pointer snap-start rounded-xl object-cover"
-      @click="openFullscreen(index)"
-    />
   </div>
 
   <!-- Fullscreen Modal -->
@@ -75,15 +66,15 @@
   >
     <!-- Close button -->
     <button
-      class="z-60 hover:[>color:background] absolute right-6 top-6 flex size-14 items-center justify-center rounded-xl bg-background transition hover:bg-fill"
+      class="z-60 hover:[>color:background] absolute right-6 top-6 flex size-14 items-center justify-center rounded-xl bg-background transition hover:bg-primary hover:text-background"
       @click="closeFullscreen"
     >
-      <Icon name="fe:close" class="h-6 w-6 text-secondary" />
+      <Icon name="fe:close" class="h-6 w-6" />
     </button>
 
     <!-- Navigation controls -->
     <div
-      class="z-60 absolute left-6 top-6 flex rounded-xl bg-background shadow-xl"
+      class="z-60 absolute left-6 top-6 flex overflow-hidden rounded-xl bg-background shadow-xl"
       v-if="normalizedImages.length > 1"
     >
       <p class="px-4 py-3 text-lg font-medium">
@@ -94,20 +85,20 @@
           'opacity-50': fullscreenIndex <= 0,
           'pointer-events-none': fullscreenIndex <= 0,
         }"
-        class="flex items-center px-4 py-3 text-lg transition hover:bg-primary hover:text-background"
+        class="group flex items-center px-4 py-3 text-lg text-secondary transition hover:bg-primary hover:text-background"
         @click.stop="previousFullscreen"
       >
-        <Icon name="fe:arrow-left" class="h-6 w-6 text-secondary" />
+        <Icon name="fe:arrow-left" class="h-6 w-6" />
       </button>
       <button
-        class="flex items-center px-4 py-3 text-lg transition hover:bg-primary hover:text-background"
+        class="flex items-center px-4 py-3 text-lg text-secondary transition hover:bg-primary hover:text-background"
         :class="{
           'opacity-50': fullscreenIndex >= normalizedImages.length - 1,
           'pointer-events-none': fullscreenIndex >= normalizedImages.length - 1,
         }"
         @click.stop="nextFullscreen"
       >
-        <Icon name="fe:arrow-right" class="h-6 w-6 text-secondary" />
+        <Icon name="fe:arrow-right" class="h-6 w-6" />
       </button>
     </div>
 
@@ -118,25 +109,6 @@
       class="max-h-[90vh] max-w-[90vw] rounded-3xl object-contain shadow-2xl"
       @click.stop
     />
-
-    <!-- Navigation arrows -->
-    <button
-      v-if="normalizedImages.length > 1 && fullscreenIndex > 0"
-      class="z-60 absolute left-6 top-1/2 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-xl bg-background text-2xl font-bold transition hover:bg-fill"
-      @click.stop="previousFullscreen"
-    >
-      <
-    </button>
-    <button
-      v-if="
-        normalizedImages.length > 1 &&
-        fullscreenIndex < normalizedImages.length - 1
-      "
-      class="z-60 absolute right-6 top-1/2 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-xl bg-background text-2xl font-bold transition hover:bg-fill"
-      @click.stop="nextFullscreen"
-    >
-      >
-    </button>
   </div>
 </template>
 
@@ -146,13 +118,9 @@ import { Icon } from "#components";
 interface Props {
   images: string[];
   altText?: string;
-  variant?: "default" | "event";
 }
 
-const props = withDefaults(defineProps<Props>(), {
-  variant: "default",
-});
-
+const props = defineProps<Props>();
 const normalizedImages = computed(() => {
   return props.images || [];
 });

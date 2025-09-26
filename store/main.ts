@@ -2,6 +2,7 @@ import { getContent } from "~/utils/CMS";
 
 export const useMainStore = defineStore("main", () => {
   const loaded = ref(false);
+  const closedPopup = ref<string | undefined>(undefined);
 
   const mailing = ref<null | string>(null);
   const events = ref<
@@ -29,7 +30,25 @@ export const useMainStore = defineStore("main", () => {
     | "error"
   >({});
 
+  const popUpContent = computed<IPost | null>(() => {
+    if (closedPopup.value || posts.value === "error") return null;
+    // get the newest post and if its id didn't match closedPopup, return it
+    const sortedPosts = Object.values(posts.value).sort((a, b) => {
+      if (!a.timestamp || !b.timestamp) return 0;
+      return b.timestamp - a.timestamp;
+    });
+    if (sortedPosts.length === 0) return null;
+    if (closedPopup.value || sortedPosts[0].id === closedPopup.value)
+      return null;
+    return sortedPosts[0];
+  });
+
   onMounted(async () => {
+    const closed = localStorage.getItem("closedPopup");
+    if (closed) {
+      closedPopup.value = closed;
+    }
+
     const mail = localStorage.getItem("mailing");
     if (mail) {
       mailing.value = mail;
@@ -140,6 +159,10 @@ export const useMainStore = defineStore("main", () => {
     loaded.value = true;
   });
 
+  const closePopup = (id: string) => {
+    closedPopup.value = id;
+  };
+
   const subscribe = async (mail: string) => {};
 
   const unsubscribe = async () => {};
@@ -152,7 +175,15 @@ export const useMainStore = defineStore("main", () => {
     }
   });
 
+  watch(closedPopup, (value) => {
+    if (value) {
+      localStorage.setItem("closedPopup", value);
+    }
+  });
+
   return {
+    popUpContent,
+    closePopup,
     loaded,
     mailing,
     subscribe,
