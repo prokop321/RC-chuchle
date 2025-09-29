@@ -35,7 +35,7 @@
             </div>
             <div class="flex flex-col gap-1">
               <p>Tel: 721 558 568 - Eva Ness</p>
-              <p>Tel: 737 659 813 - Katka Míroková</p>
+              <p>Tel: 737 659 813 - Katka Mírková</p>
             </div>
           </div>
         </div>
