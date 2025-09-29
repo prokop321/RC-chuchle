@@ -35,7 +35,7 @@
             </div>
             <div class="flex flex-col gap-1">
               <p>Tel: 721 558 568 - Eva Ness</p>
-              <p>Tel: 603 268 256 - Věra Formanová</p>
+              <p>Tel: 737 659 813 - Katka Míroková</p>
             </div>
           </div>
         </div>

@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="normalizedImages && normalizedImages.length > 0"
-    class="lg:w-2xl relative aspect-square w-full max-w-xl overflow-hidden rounded-xl bg-fill"
+    class="lg:w-2xl relative aspect-square max-w-xl overflow-hidden rounded-xl bg-fill"
   >
     <div
       v-if="normalizedImages.length > 1"

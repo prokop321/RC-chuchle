@@ -1,5 +1,4 @@
 <template>
-  {{ popUpContent || "no popup" }}
   <Transition name="fade">
     <div
       v-if="popUpContent"

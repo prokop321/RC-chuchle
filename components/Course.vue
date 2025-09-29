@@ -1,30 +1,31 @@
 <template>
   <NuxtLink
     :to="`/kurz/${course.id}`"
-    class="group flex max-w-96 flex-col gap-6 rounded-3xl border-2 border-fill px-6 py-8 shadow-sm transition hover:border-secondary hover:shadow-lg"
+    class="group flex flex-col gap-2 rounded-3xl border-2 border-fill p-4 shadow-sm transition hover:border-secondary hover:shadow-lg"
   >
     <img
       :src="imageURLCreator(course.images[0])"
+      class="max-h-32 w-full rounded-lg object-cover"
       alt="Obrázek kurzu"
       v-if="course.images && course.images.length"
     />
     <div class="flex flex-col gap-1">
-      <h3 class="text-2xl">{{ course.title }}</h3>
-      <div>
-        <p v-if="course.schedule">
+      <h3 class="text-xl">{{ course.title }}</h3>
+      <div class="flex flex-wrap items-center">
+        <p v-if="course.schedule" class="mr-2">
           {{ dayTimeToString(course.schedule?.start) }} -
           {{ dayTimeToString(course.schedule.end) }}
         </p>
         <NuxtLink
           v-if="lektorId && lektorName"
           :to="`/lektor/${lektorId}`"
-          class="text-secondary underline"
+          class="mb-2 text-secondary underline"
         >
           {{ lektorName }}
         </NuxtLink>
       </div>
     </div>
-    <h4 class="text-primary underline">
+    <h4 class="-mt-2 ml-1 text-primary underline">
       Zjistit více<span
         class="ml-1 inline-block transition-transform group-hover:translate-x-0.5"
         >></span
