@@ -14,7 +14,7 @@
         :alt-text="`Obrázek kurzu ${course.title}`"
         variant="event"
       />
-      <div class="flex flex-col gap-8">
+      <div class="flex flex-1 flex-col gap-8">
         <div class="flex flex-col gap-1">
           <h3
             class="flex gap-4 text-3xl"
@@ -34,7 +34,6 @@
             {{ lektorName }}
           </NuxtLink>
         </div>
-
         <VueMarkdown
           v-if="course.description"
           :source="course.description"
@@ -46,6 +45,8 @@
 </template>
 
 <script lang="ts" setup>
+import VueMarkdown from "vue-markdown-render";
+
 import { useMainStore } from "~/store/main";
 
 const courseID = useRoute().params.id as string;
