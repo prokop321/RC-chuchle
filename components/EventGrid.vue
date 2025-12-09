@@ -108,9 +108,14 @@ const eventsToShow = computed<IEvent[]>(() => {
   });
 
   const sortedArray = filterArray.sort((a, b) => {
+    if (props.filtering.upcoming){
     if (!a.date) return 1;
     if (!b.date) return -1;
     return new Date(a.date).getTime() - new Date(b.date).getTime();
+    }
+    if (!a.date) return -1;
+    if (!b.date) return 1;
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
 
   const slicedArray = sortedArray.slice(
