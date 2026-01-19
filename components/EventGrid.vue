@@ -17,27 +17,26 @@
       :event="event"
     />
   </div>
-  <template v-else>
-    <div
-      v-if="events === 'error'"
-      class="flex w-full flex-col items-center gap-4 py-8"
-    >
-      <h3>Nastal problém během načítání akcí 😬</h3>
-      <p>Zkus stránku načíst znova nebo ji zkontroluj později</p>
-    </div>
-    <div
-      v-else-if="eventsToShow.length === 0"
-      class="flex w-full flex-col items-center gap-4 py-8"
-    >
-      <p class="w-full py-8">
-        {{
-          filtering?.upcoming
-            ? "Aktuálně nejsou žádné naplánované akce"
-            : "Žádné akce k zobrazení"
-        }}
-      </p>
-    </div>
-  </template>
+
+  <div
+    v-else-if="events === 'error'"
+    class="flex w-full flex-col items-center gap-4 py-8"
+  >
+    <h3>Nastal problém během načítání akcí 😬</h3>
+    <p>Zkus stránku načíst znova nebo ji zkontroluj později</p>
+  </div>
+  <div
+    v-else-if="eventsToShow.length === 0"
+    class="flex w-full flex-col items-center gap-4 py-8"
+  >
+    <p class="w-full py-8">
+      {{
+        filtering?.upcoming
+          ? "Aktuálně nejsou žádné naplánované akce"
+          : "Žádné akce k zobrazení"
+      }}
+    </p>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -73,6 +72,7 @@ const eventsToShow = computed<IEvent[]>(() => {
 
   const filterArray = eventsArray.filter((event) => {
     if (!filtering) return true;
+    if (filtering.type && event.type !== filtering.type) return false;
 
     if (filtering.upcoming) {
       if (!event.date) return false;
@@ -101,8 +101,6 @@ const eventsToShow = computed<IEvent[]>(() => {
         }
       }
     }
-
-    if (filtering.type && event.type !== filtering.type) return false;
 
     return true;
   });
