@@ -20,18 +20,12 @@
         <div class="flex flex-col gap-4">
           <div class="flex flex-col gap-2">
             <div class="flex flex-col">
-              <NuxtLink
+              <a
                 class="text-secondary underline"
-                to="mailto:rcchuchle@gmail.com"
+                href="mailto:rcchuchle@gmail.com"
               >
                 rcchuchle@gmail.com
-              </NuxtLink>
-              <NuxtLink
-                class="text-secondary underline"
-                to="mailto:info@rcchuchle.cz"
-              >
-                info@rcchuchle.cz
-              </NuxtLink>
+              </a>
             </div>
             <div class="flex flex-col gap-1">
               <p>Tel: 721 558 568 - Eva Ness</p>
