@@ -27,9 +27,21 @@
                 rcchuchle@gmail.com
               </a>
             </div>
-            <div class="flex flex-col gap-1">
-              <p>Tel: 721 558 568 - Eva Ness</p>
-              <p>Tel: 737 659 813 - Katka Mírková</p>
+            <div class="flex flex-col gap-1 text-sm">
+              <p>
+                Tel:
+                <a class="text-secondary underline" href="tel:+420721558568"
+                  >+420 721 558 568</a
+                >
+                - Eva Ness
+              </p>
+              <p>
+                Tel:
+                <a class="text-secondary underline" href="tel:+420737659813"
+                  >+420 737 659 813</a
+                >
+                - Katka Mírková
+              </p>
             </div>
           </div>
         </div>
