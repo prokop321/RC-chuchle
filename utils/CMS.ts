@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const CMSURL = "https://prokop321.github.io/RC-Chuchle-content-";
+const CMSURL = "https://cms.rcchuchle.cz/";
 
 export const getContent = async (
   content: "akce" | "kurzy" | "lektori" | "aktuality",
