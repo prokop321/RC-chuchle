@@ -4,7 +4,7 @@
     <!-- Colorful geometric background pattern overlay -->
     <img
       class="absolute inset-0 size-full scale-105 object-cover opacity-70 blur-md"
-      src="/patern.jpg"
+      src="/patern.webp"
     />
 
     <div
